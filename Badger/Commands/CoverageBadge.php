@@ -40,7 +40,7 @@ class CoverageBadge extends Command
         $coverage = simplexml_load_file($crowPHPPath);
         $elements = $coverage->project->metrics['elements'];
         $coveredElements = $coverage->project->metrics['coveredelements'];
-        $coverage = round(("300" * 100) / $elements, 2);
+        $coverage = round(($coveredElements * 100) / $elements, 2);
         file_put_contents($branchCoverageFile, json_encode([
             "schemaVersion" => 1,
             "label" => "coverage",
