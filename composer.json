@@ -1,0 +1,21 @@
+{
+    "name": "crowphp/badger",
+    "authors": [
+        {
+            "name": "Yousaf Syed",
+            "email": "mmesunny@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "^5.2",
+        "ext-simplexml": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Badger\\": "Badger"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
