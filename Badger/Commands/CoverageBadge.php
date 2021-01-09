@@ -51,7 +51,7 @@ class CoverageBadge extends Command
         $output->writeln(shell_exec('
         #!/bin/bash
         git add .
-        git commit -asm "Updating coverage file for' . $branchName . '";
+        git commit -asm "Updating coverage file for ' . $branchName . '";
         git push origin master;
         '));
         return Command::SUCCESS;
