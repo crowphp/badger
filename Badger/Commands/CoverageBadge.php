@@ -55,7 +55,7 @@ class CoverageBadge extends Command
                 "message" => $coverage . "%",
                 "color" => $this->getCoverageColor($coverage)
             ],
-            "header" => [
+            "headers" => [
                 "secret-ket" => "yousaf"
             ]
         ]);
