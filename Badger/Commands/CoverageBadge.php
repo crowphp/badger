@@ -14,7 +14,6 @@ class CoverageBadge extends Command
     const SERVER_LABEL = "server";
     const SECRET_KEY_LABEL = "secret-key";
     protected static $defaultName = 'upload:coverage';
-    private const PATH_LABEL = "path";
     private const BRANCH_LABEL = "branch";
 
     protected function configure()
@@ -41,7 +40,8 @@ class CoverageBadge extends Command
     {
 
         $output->writeln(["Creating coverage badge", "=========================="]);
-        $branchName = $input->getArgument(self::BRANCH_LABEL);
+        $branch = explode("/", $input->getArgument(self::BRANCH_LABEL));
+        $branchName = end($branch);
         $client = new Client([
             // Base URI is used with relative requests
             'base_uri' => $input->getArgument(self::SERVER_LABEL),
