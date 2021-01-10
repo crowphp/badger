@@ -72,9 +72,9 @@ class CoverageBadge extends Command
     {
         switch ($coverage) {
             case $coverage > 90:
-                return "green";
+                return "success";
             case $coverage < 90 && $coverage > 75:
-                return "yellow";
+                return "orange";
             case $coverage < 75:
                 return "red";
         }
