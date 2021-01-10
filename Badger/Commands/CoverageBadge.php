@@ -6,22 +6,23 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use GuzzleHttp\Client;
 
 class CoverageBadge extends Command
 {
-    protected static $defaultName = 'badger:coverage';
+    const SERVER_LABEL = "server";
+    protected static $defaultName = 'upload:coverage';
     private const PATH_LABEL = "path";
     private const BRANCH_LABEL = "branch";
-    private string $coverageFolder = "coverage";
 
     protected function configure()
     {
         $this
-            ->setDescription('Creates json for coverage badge shields.io')
+            ->setDescription('Creates json for coverage badge shields.io and uploads it to a given badger server')
             ->addArgument(
-                CoverageBadge::PATH_LABEL,
+                CoverageBadge::SERVER_LABEL,
                 InputArgument::REQUIRED,
-                'The path to the directory for crowPHP repo'
+                'URL for Badger Server'
             )
             ->addArgument(
                 CoverageBadge::BRANCH_LABEL,
@@ -32,28 +33,32 @@ class CoverageBadge extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+
         $output->writeln(["Creating coverage badge", "=========================="]);
-        $crowPHPPath = $input->getArgument(self::PATH_LABEL) . '/coverage/clover.xml';
         $branchName = $input->getArgument(self::BRANCH_LABEL);
-        $branchCoverageFile = __DIR__ . "/../../coverage/" . $branchName . ".json";
-        $output->writeln(["Reading file " . $crowPHPPath]);
-        $coverage = simplexml_load_file($crowPHPPath);
+        $client = new Client([
+            // Base URI is used with relative requests
+            'base_uri' => $input->getArgument(self::SERVER_LABEL),
+            // You can set any number of default request options.
+            'timeout' => 2.0,
+        ]);
+        $output->writeln(["Reading Coverage file ..."]);
+        $coverage = simplexml_load_file("./coverage/clover.xml");
         $elements = $coverage->project->metrics['elements'];
         $coveredElements = $coverage->project->metrics['coveredelements'];
         $coverage = round(($coveredElements * 100) / $elements, 2);
-        file_put_contents($branchCoverageFile, json_encode([
-            "schemaVersion" => 1,
-            "label" => "coverage",
-            "message" => $coverage . "%",
-            "color" => $this->getCoverageColor($coverage)
-        ]));
-        $output->writeln($branchCoverageFile);
-        $output->writeln(shell_exec('
-        #!/bin/bash
-        git add .
-        git commit -asm "Updating coverage file for ' . $branchName . '";
-        git push origin master;
-        '));
+        $client->post("/coverage/$branchName", [
+            "body" => [
+                "schemaVersion" => 1,
+                "label" => "coverage",
+                "message" => $coverage . "%",
+                "color" => $this->getCoverageColor($coverage)
+            ],
+            "header" => [
+                "secret-ket" => "yousaf"
+            ]
+        ]);
+        $output->writeln("Done.");
         return Command::SUCCESS;
     }
 

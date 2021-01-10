@@ -1,21 +1,37 @@
 {
-    "name": "crowphp/badger",
-    "authors": [
-        {
-            "name": "Yousaf Syed",
-            "email": "mmesunny@gmail.com"
-        }
-    ],
-    "require": {
-        "symfony/console": "^5.2",
-        "ext-simplexml": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "Badger\\": "Badger"
-        }
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^9.5"
+  "name": "crowphp/badger",
+  "type": "library",
+  "description": "Command-line utility for generating badges for coverage",
+  "keywords": [
+    "php",
+    "cli",
+    "utility",
+    "shields.io",
+    "crowphp"
+  ],
+  "homepage": "https://crowphp.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Yousaf Syed",
+      "email": "mmesunny@gmail.com"
     }
+  ],
+  "require": {
+    "symfony/console": "^5.2",
+    "ext-simplexml": "*",
+    "crowphp/crow": "dev-master",
+    "guzzlehttp/guzzle": "^7.2"
+  },
+  "bin": [
+    "badger"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Badger\\": "Badger"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  }
 }
