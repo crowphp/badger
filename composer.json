@@ -20,7 +20,6 @@
   "require": {
     "symfony/console": "^5.2",
     "ext-simplexml": "*",
-    "crowphp/crow": "dev-master",
     "guzzlehttp/guzzle": "^7.2"
   },
   "bin": [
