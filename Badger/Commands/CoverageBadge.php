@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 
 class CoverageBadge extends Command
 {
@@ -48,7 +49,7 @@ class CoverageBadge extends Command
         $coveredElements = $coverage->project->metrics['coveredelements'];
         $coverage = round(($coveredElements * 100) / $elements, 2);
         $client->post("/coverage/$branchName", [
-            "body" => [
+            RequestOptions::JSON => [
                 "schemaVersion" => 1,
                 "label" => "coverage",
                 "message" => $coverage . "%",
