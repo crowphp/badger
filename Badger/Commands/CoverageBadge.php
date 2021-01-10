@@ -12,6 +12,7 @@ use GuzzleHttp\RequestOptions;
 class CoverageBadge extends Command
 {
     const SERVER_LABEL = "server";
+    const SECRET_KEY_LABEL = "secret-key";
     protected static $defaultName = 'upload:coverage';
     private const PATH_LABEL = "path";
     private const BRANCH_LABEL = "branch";
@@ -29,6 +30,10 @@ class CoverageBadge extends Command
                 CoverageBadge::BRANCH_LABEL,
                 InputArgument::REQUIRED,
                 'The branch name for the coverage'
+            )->addArgument(
+                CoverageBadge::SECRET_KEY_LABEL,
+                InputArgument::REQUIRED,
+                'Secret api key for badger server'
             );
     }
 
@@ -56,7 +61,7 @@ class CoverageBadge extends Command
                 "color" => $this->getCoverageColor($coverage)
             ],
             "headers" => [
-                "secret-ket" => "yousaf"
+                "secret-key" => $input->getArgument(self::SECRET_KEY_LABEL)
             ]
         ]);
         $output->writeln("Done.");
